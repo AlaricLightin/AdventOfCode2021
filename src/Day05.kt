@@ -30,7 +30,6 @@ fun main() {
     println(part2(input))
 }
 
-private data class Point(val x: Int, val y: Int)
 private data class Line(val start: Point, val end: Point)
 
 private fun calculate(input: List<String>, diagonalFunction: (Line) -> Array<Point>): Int {

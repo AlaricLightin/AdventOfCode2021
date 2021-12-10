@@ -6,12 +6,12 @@ fun main() {
     println(part2("Day10"))
 }
 
-val OPENING_BRACES = setOf('(', '[', '{', '<')
-val BRACES_MAP = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>')
-val BRACES_PRICE_WRONG = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
-val BRACES_PRICE_COMPLETE = mapOf('(' to 1, '[' to 2, '{' to 3, '<' to 4)
+private val OPENING_BRACES = setOf('(', '[', '{', '<')
+private val BRACES_MAP = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>')
+private val BRACES_PRICE_WRONG = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
+private val BRACES_PRICE_COMPLETE = mapOf('(' to 1, '[' to 2, '{' to 3, '<' to 4)
 
-fun part1(inputFilename: String): Int {
+private fun part1(inputFilename: String): Int {
     var result = 0
     getInputFile(inputFilename).forEachLine {
         val stack = ArrayDeque<Char>()
@@ -30,7 +30,7 @@ fun part1(inputFilename: String): Int {
     return result
 }
 
-fun part2(inputFilename: String): Long {
+private fun part2(inputFilename: String): Long {
     val resultList = mutableListOf<Long>()
     getInputFile(inputFilename).forEachLine {
         val stack = ArrayDeque<Char>()

@@ -11,51 +11,52 @@ fun main() {
 }
 
 private fun part1(inputFilename: String): Int {
+    fun findPathCountPart(currentNode: String,
+                          currentPathSet: Set<String>,
+                          graphMap: Map<String, MutableSet<String>>): Int {
+        var result = 0
+        graphMap[currentNode]?.forEach{
+            if (it == "end")
+                result++
+            else
+                if (it[0].isUpperCase() || !currentPathSet.contains(it))
+                    result += findPathCountPart(it, currentPathSet.plus(currentNode), graphMap)
+        }
+        return result
+    }
+
     val graphMap: Map<String, MutableSet<String>> = createGraphMap(inputFilename)
-    return findPathCountPart1("start", setOf(), graphMap)
+    return findPathCountPart("start", setOf(), graphMap)
 }
 
 private fun part2(inputFilename: String): Int {
-    val graphMap: Map<String, MutableSet<String>> = createGraphMap(inputFilename)
-    return findPathCountPart2("start", setOf(), false, graphMap)
-}
+    fun findPathCountPart(currentNode: String,
+                          currentPathSet: Set<String>,
+                          smallNodeVisitedTwice: Boolean,
+                          graphMap: Map<String, MutableSet<String>>): Int {
+        var result = 0
+        graphMap[currentNode]?.forEach{
+            when {
+                it == "start" -> {}
 
-private fun findPathCountPart1(currentNode: String,
-                               currentPathSet: Set<String>,
-                               graphMap: Map<String, MutableSet<String>>): Int {
-    var result = 0
-    graphMap[currentNode]?.forEach{
-        if (it == "end")
-            result++
-        else
-        if (it[0].isUpperCase() || !currentPathSet.contains(it))
-            result += findPathCountPart1(it, currentPathSet.plus(currentNode), graphMap)
-    }
-    return result
-}
+                it == "end" ->
+                    result++
 
-private fun findPathCountPart2(currentNode: String,
-                               currentPathSet: Set<String>,
-                               smallNodeVisitedTwice: Boolean,
-                               graphMap: Map<String, MutableSet<String>>): Int {
-    var result = 0
-    graphMap[currentNode]?.forEach{
-        if (it == "end")
-            result++
-        else {
-            if (it[0].isUpperCase())
-                result += findPathCountPart2(it, currentPathSet.plus(currentNode), smallNodeVisitedTwice, graphMap)
-            else if (it != "start") {
-                if (!currentPathSet.contains(it))
-                    result += findPathCountPart2(it, currentPathSet.plus(currentNode), smallNodeVisitedTwice, graphMap)
-                else {
-                    if (!smallNodeVisitedTwice)
-                        result += findPathCountPart2(it, currentPathSet.plus(currentNode), true, graphMap)
-                }
+                it[0].isUpperCase() ->
+                    result += findPathCountPart(it, currentPathSet.plus(currentNode), smallNodeVisitedTwice, graphMap)
+
+                !currentPathSet.contains(it) ->
+                    result += findPathCountPart(it, currentPathSet.plus(currentNode), smallNodeVisitedTwice, graphMap)
+
+                !smallNodeVisitedTwice ->
+                    result += findPathCountPart(it, currentPathSet.plus(currentNode), true, graphMap)
             }
         }
+        return result
     }
-    return result
+
+    val graphMap: Map<String, MutableSet<String>> = createGraphMap(inputFilename)
+    return findPathCountPart("start", setOf(), false, graphMap)
 }
 
 private fun createGraphMap(inputFilename: String): Map<String, MutableSet<String>> {
